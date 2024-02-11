@@ -40,9 +40,7 @@ ${chalk.whiteBright.bgRed.bold('yarn add your-package')}
  ${chalk.bold('Install the package to "./release/app/package.json"')}
 ${chalk.whiteBright.bgGreen.bold('cd ./release/app && yarn add your-package')}
  Read more about native dependencies at:
-${chalk.bold(
-  'https://github.com/mrh-jishan/iNotebook',
-)}
+${chalk.bold('https://github.com/mrh-jishan/iNotebook')}
  `);
       process.exit(1);
     }

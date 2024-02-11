@@ -9,7 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, screen } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -60,11 +60,23 @@ const installExtensions = async () => {
 /**
  * popupWindow create
  */
-
 const createPopupIcon = () => {
+  const { width: screenWidth, height: screenHeight } =
+    screen.getPrimaryDisplay().workAreaSize;
+ 
+    // Define the percentages for positioning
+  const xPercentage = 0.95; // 89% from the left
+  const yPercentage = 0.15; // 15% from the top
+
+  // Calculate the default position based on percentages
+  const defaultX = Math.floor(screenWidth * xPercentage) - 100; // Assuming the width of the window is 100 pixels
+  const defaultY = Math.floor(screenHeight * yPercentage); // Assuming the height of the window is 100 pixels
+
   popupWindow = new BrowserWindow({
     width: 100,
     height: 100,
+    x: defaultX,
+    y: defaultY,
     frame: false,
     webPreferences: {
       preload: app.isPackaged
@@ -164,6 +176,15 @@ ipcMain.on('close-popup', async () => {
     mainWindow.show();
   }
   popupWindow?.hide();
+});
+
+// Handle message from renderer process to start dragging
+ipcMain.on('start-drag', (event, position) => {
+  log.info('position moved----------: ', position);
+  // log.info('event------:', event);
+  const { x, y } = position;
+  // // Update the position of the popupWindow
+  popupWindow?.setPosition(x, y);
 });
 
 /**
