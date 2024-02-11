@@ -1,12 +1,12 @@
 {
-  "name": "electron-react-boilerplate",
+  "name": "inotebook",
   "version": "4.6.0",
-  "description": "A foundation for scalable desktop apps",
+  "description": "electron base corss platform notebook app",
   "license": "MIT",
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://github.com/electron-react-boilerplate"
+    "name": "iNotebook",
+    "email": "robiul.hassan12102@gmail.com",
+    "url": "https://github.com/mrh-jishan"
   },
   "main": "./dist/main/main.js",
   "scripts": {
