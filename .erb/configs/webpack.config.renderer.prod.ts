@@ -130,7 +130,7 @@ const configuration: webpack.Configuration = {
       },
       isBrowser: false,
       isDevelopment: false,
-      chunks: ['renderer']
+      chunks: ['renderer'],
     }),
 
     new HtmlWebpackPlugin({
@@ -143,7 +143,7 @@ const configuration: webpack.Configuration = {
       },
       isBrowser: false,
       isDevelopment: false,
-      chunks: ['bubble']
+      chunks: ['bubble'],
     }),
 
     new webpack.DefinePlugin({

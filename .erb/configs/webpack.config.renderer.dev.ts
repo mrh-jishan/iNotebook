@@ -165,7 +165,7 @@ const configuration: webpack.Configuration = {
       env: process.env.NODE_ENV,
       isDevelopment: process.env.NODE_ENV !== 'production',
       nodeModules: webpackPaths.appNodeModulesPath,
-      chunks: ['renderer']
+      chunks: ['renderer'],
     }),
 
     new HtmlWebpackPlugin({
@@ -180,7 +180,7 @@ const configuration: webpack.Configuration = {
       env: process.env.NODE_ENV,
       isDevelopment: process.env.NODE_ENV !== 'production',
       nodeModules: webpackPaths.appNodeModulesPath,
-      chunks: ['bubble']
+      chunks: ['bubble'],
     }),
   ],
 

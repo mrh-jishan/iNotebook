@@ -57,6 +57,36 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
+/**
+ * popupWindow create
+ */
+
+const createPopupIcon = () => {
+  popupWindow = new BrowserWindow({
+    width: 100,
+    height: 100,
+    frame: false,
+    webPreferences: {
+      preload: app.isPackaged
+        ? path.join(__dirname, 'preload.js')
+        : path.join(__dirname, '../../.erb/dll/preload.js'),
+      devTools: false,
+    },
+    resizable: false,
+    transparent: true,
+    alwaysOnTop: true,
+  });
+
+  popupWindow.loadURL(resolveHtmlPath('bubble.html'));
+
+  // Implement dragging for the popup icon
+  popupWindow.setIgnoreMouseEvents(false); // Enable mouse events to allow dragging
+  popupWindow.setAlwaysOnTop(true); // Ensure the icon is always visible
+
+  // new AppUpdater();
+  console.log('this would be create popup-icon');
+};
+
 const createWindow = async () => {
   if (isDebug) {
     await installExtensions();
@@ -102,7 +132,7 @@ const createWindow = async () => {
     } else {
       popupWindow.show();
     }
-    mainWindow?.hide()
+    mainWindow?.hide();
   });
 
   mainWindow.on('closed', () => {
@@ -126,52 +156,15 @@ const createWindow = async () => {
   new AppUpdater();
 };
 
-/**
- * popupWindow create
- */
-
-const createPopupIcon = () => {
-  popupWindow = new BrowserWindow({
-    width: 100,
-    height: 100,
-    frame: false,
-    webPreferences: {
-      preload: app.isPackaged
-        ? path.join(__dirname, 'preload.js')
-        : path.join(__dirname, '../../.erb/dll/preload.js'),
-      devTools: false,
-    },
-    resizable: false,
-    transparent: true,
-    alwaysOnTop: true,
-  });
-
-  popupWindow.loadURL(resolveHtmlPath('bubble.html'));
-
-  // Implement dragging for the popup icon
-  popupWindow.setIgnoreMouseEvents(false); // Enable mouse events to allow dragging
-  popupWindow.setAlwaysOnTop(true); // Ensure the icon is always visible
-
-  // Handle click on the popup icon
-  ipcMain.on('close-popup', async (event, arg) => {
-    restoreAppState();
-  });
-
-  // new AppUpdater();
-  console.log('this would be create popup-icon');
-};
-
-const restoreAppState = () => {
-  // Implement restoring the app to its previous state
-  // This could involve reloading the main window with the stored state
-  console.log('restoreAppState---------', this);
+// Handle click on the popup icon
+ipcMain.on('close-popup', async () => {
   if (mainWindow === null) {
     createWindow();
   } else {
     mainWindow.show();
   }
   popupWindow?.hide();
-};
+});
 
 /**
  * Add event listeners...
