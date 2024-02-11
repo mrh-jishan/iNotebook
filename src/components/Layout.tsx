@@ -2,10 +2,11 @@ import React, { Suspense } from 'react';
 import {
   UploadOutlined,
   UserOutlined,
+  PlusSquareOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, theme } from 'antd';
-import { Outlet } from 'react-router-dom';
+import { FloatButton, Layout, Menu, theme } from 'antd';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Loader from './Loader';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -22,9 +23,14 @@ const items = [
 }));
 
 const AppLayout: React.FC = () => {
+  const navigate = useNavigate();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const createNewNote = () => {
+    navigate('/notes/new');
+  };
 
   return (
     <Layout>
@@ -64,6 +70,14 @@ const AppLayout: React.FC = () => {
             }}
           >
             <Suspense fallback={<Loader />}>
+              <FloatButton
+                tooltip={<div>New iNote</div>}
+                shape="circle"
+                type="primary"
+                style={{ right: 50 }}
+                onClick={createNewNote}
+                icon={<PlusSquareOutlined />}
+              />
               <Outlet />
             </Suspense>
           </div>

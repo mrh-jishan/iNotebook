@@ -3,6 +3,7 @@ import { RouterProvider, createHashRouter } from 'react-router-dom';
 import './App.css';
 import AppLayout from '../components/Layout';
 import Page404 from '../pages/Page404';
+import NewNote from '../pages/NewNote';
 const Home = React.lazy(() => import('../pages/Home'));
 const Notes = React.lazy(() => import('../pages/Notes'));
 const Hello = React.lazy(() => import('../pages/Hello'));
@@ -23,7 +24,10 @@ export default function App() {
           path: '/notes',
           element: <Notes />,
         },
-
+        {
+          path: '/notes/new',
+          element: <NewNote />,
+        },
         {
           path: '/hello',
           element: <Hello />,
