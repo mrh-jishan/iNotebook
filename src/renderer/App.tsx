@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Route,
-  MemoryRouter as Router,
-  RouterProvider,
-  Routes,
-  createBrowserRouter,
-} from 'react-router-dom';
+import { RouterProvider, createHashRouter } from 'react-router-dom';
 import './App.css';
 import AppLayout from '../components/Layout';
 import Page404 from '../pages/Page404';
@@ -15,7 +9,7 @@ const Hello = React.lazy(() => import('../pages/Hello'));
 const About = React.lazy(() => import('../pages/About'));
 
 export default function App() {
-  const router = createBrowserRouter([
+  const router = createHashRouter([
     {
       path: '/',
       element: <AppLayout />,

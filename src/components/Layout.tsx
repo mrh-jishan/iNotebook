@@ -29,8 +29,11 @@ const AppLayout: React.FC = () => {
   return (
     <Layout>
       <Sider
+        theme="light"
         breakpoint="lg"
         collapsedWidth="0"
+        // collapsible={true}
+        width={300}
         style={{
           minHeight: '100vh',
         }}
@@ -41,9 +44,9 @@ const AppLayout: React.FC = () => {
           console.log(collapsed, type);
         }}
       >
-        <div className="demo-logo-vertical" />
+        {/* <div className="demo-logo-vertical" /> */}
         <Menu
-          theme="dark"
+          theme="light"
           mode="inline"
           defaultSelectedKeys={['4']}
           items={items}
@@ -51,11 +54,11 @@ const AppLayout: React.FC = () => {
       </Sider>
       <Layout>
         {/* <Header style={{ padding: 0, background: colorBgContainer }} /> */}
-        <Content style={{ margin: '24px 16px 0' }}>
+        <Content style={{ margin: '8px' }}>
           <div
             style={{
               padding: 24,
-              minHeight: 360,
+              minHeight: 'calc(100vh - 16px)',
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}
@@ -65,9 +68,9 @@ const AppLayout: React.FC = () => {
             </Suspense>
           </div>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>
+        {/* <Footer style={{ textAlign: 'center' }}>
           Ant Design ©{new Date().getFullYear()} Created by Ant UED
-        </Footer>
+        </Footer> */}
       </Layout>
     </Layout>
   );

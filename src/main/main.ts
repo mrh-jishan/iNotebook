@@ -139,12 +139,12 @@ const createWindow = async () => {
 
   // Detect click outside of the main window
   mainWindow.on('blur', () => {
-    if (popupWindow === null) {
-      createPopupIcon();
-    } else {
-      popupWindow.show();
-    }
-    mainWindow?.hide();
+    // if (popupWindow === null) {
+    //   createPopupIcon();
+    // } else {
+    //   popupWindow.show();
+    // }
+    // mainWindow?.hide();
   });
 
   mainWindow.on('closed', () => {
