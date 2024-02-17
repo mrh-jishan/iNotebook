@@ -1,7 +1,12 @@
 import { DatePicker } from 'antd';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Link, useParams } from 'react-router-dom';
 
-export default function Notes() {
+const Notes: React.FC = () => {
+  let { noteId } = useParams();
+
+  console.log('this is note id: ', noteId);
+
   return (
     <div>
       <Link to="/">
@@ -15,4 +20,6 @@ export default function Notes() {
       <DatePicker />
     </div>
   );
-}
+};
+
+export default Notes;

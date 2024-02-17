@@ -8,12 +8,28 @@ const Home = React.lazy(() => import('../pages/Home'));
 const Notes = React.lazy(() => import('../pages/Notes'));
 const Hello = React.lazy(() => import('../pages/Hello'));
 const About = React.lazy(() => import('../pages/About'));
+import {
+  UploadOutlined,
+  UserOutlined,
+  VideoCameraOutlined,
+} from '@ant-design/icons';
+
+const items = [
+  UserOutlined,
+  VideoCameraOutlined,
+  UploadOutlined,
+  UserOutlined,
+].map((icon, index) => ({
+  key: String(index + 1),
+  // icon: React.createElement(icon),
+  label: `nav ${index + 1}`,
+}));
 
 export default function App() {
   const router = createHashRouter([
     {
       path: '/',
-      element: <AppLayout />,
+      element: <AppLayout menuItems={items} />,
       errorElement: <Page404 />,
       children: [
         {
@@ -22,6 +38,10 @@ export default function App() {
         },
         {
           path: '/notes',
+          element: <Notes />,
+        },
+        {
+          path: '/notes/:noteId',
           element: <Notes />,
         },
         {

@@ -1,32 +1,115 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
+import { PlusSquareOutlined } from '@ant-design/icons';
 import {
+  Button,
+  Col,
+  FloatButton,
+  Layout,
+  Menu,
+  Row,
+  theme,
+  Image,
+  Skeleton,
+  Divider,
+  List,
+  Avatar,
+  Dropdown,
+  MenuProps,
+} from 'antd';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
   UploadOutlined,
+  InfoCircleOutlined,
+  MenuOutlined,
+  DeleteOutlined,
   UserOutlined,
-  PlusSquareOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons';
-import { FloatButton, Layout, Menu, theme } from 'antd';
-import { Outlet, useNavigate } from 'react-router-dom';
 import Loader from './Loader';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const items = [
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  UserOutlined,
-].map((icon, index) => ({
-  key: String(index + 1),
-  icon: React.createElement(icon),
-  label: `nav ${index + 1}`,
-}));
+type AppLayoutProps = {
+  menuItems: any[];
+};
 
-const AppLayout: React.FC = () => {
+type DataType = {
+  gender: string;
+  name: {
+    title: string;
+    first: string;
+    last: string;
+  };
+  email: string;
+  picture: {
+    large: string;
+    medium: string;
+    thumbnail: string;
+  };
+  nat: string;
+};
+
+const AppLayout: React.FC<AppLayoutProps> = ({ menuItems }) => {
   const navigate = useNavigate();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const [collapsed, setCollapsed] = useState<boolean>(false);
+
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<DataType[]>([]);
+
+  const loadMoreData = () => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+    fetch(
+      'https://randomuser.me/api/?results=10&inc=name,gender,email,nat,picture&noinfo',
+    )
+      .then((res) => res.json())
+      .then((body) => {
+        setData([...data, ...body.results]);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    loadMoreData();
+  }, []);
+
+  const items: MenuProps['items'] = [
+    {
+      label: '1st menu item',
+      key: '1',
+      icon: <UserOutlined />,
+    },
+    {
+      label: '2nd menu item',
+      key: '2',
+      icon: <UserOutlined />,
+    },
+    {
+      label: '3rd menu item',
+      key: '3',
+      icon: <UserOutlined />,
+      danger: true,
+    },
+    {
+      label: '4rd menu item',
+      key: '4',
+      icon: <UserOutlined />,
+      danger: true,
+      disabled: true,
+    },
+  ];
 
   const createNewNote = () => {
     navigate('/notes/new');
@@ -38,10 +121,16 @@ const AppLayout: React.FC = () => {
         theme="light"
         breakpoint="lg"
         collapsedWidth="0"
-        // collapsible={true}
+        collapsible
+        collapsed={collapsed}
+        trigger={null}
         width={300}
         style={{
-          minHeight: '100vh',
+          margin: '8px 4px 4px 8px',
+          // minHeight: 'calc(100vh - 16px)',
+          background: '#f5f5f5',
+          // background: colorBgContainer,
+          borderRadius: borderRadiusLG,
         }}
         onBreakpoint={(broken) => {
           console.log(broken);
@@ -50,37 +139,145 @@ const AppLayout: React.FC = () => {
           console.log(collapsed, type);
         }}
       >
-        {/* <div className="demo-logo-vertical" /> */}
-        <Menu
-          theme="light"
-          mode="inline"
-          defaultSelectedKeys={['4']}
-          items={items}
-        />
-      </Sider>
-      <Layout>
-        {/* <Header style={{ padding: 0, background: colorBgContainer }} /> */}
-        <Content style={{ margin: '8px' }}>
-          <div
+        <Header
+          style={{
+            padding: 0,
+            background: colorBgContainer,
+            borderRadius: borderRadiusLG,
+            marginBottom: '4px',
+            // margin: '8px 0px 4px 4px',
+          }}
+        >
+          <Link
+            to="/"
             style={{
-              padding: 24,
-              minHeight: 'calc(100vh - 16px)',
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
+              display: 'inline-flex',
+              marginLeft: '20px',
             }}
           >
-            <Suspense fallback={<Loader />}>
-              <FloatButton
-                tooltip={<div>New iNote</div>}
-                shape="circle"
-                type="primary"
-                style={{ right: 50 }}
-                onClick={createNewNote}
-                icon={<PlusSquareOutlined />}
+            <img
+              width={32}
+              style={{
+                marginInlineEnd: '12px',
+                verticalAlign: 'middle',
+              }}
+              src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
+            />
+            <span
+              style={{
+                letterSpacing: '-.15px',
+              }}
+            >
+              iNotepad
+            </span>
+          </Link>
+        </Header>
+
+        <div
+          id="scrollableNoteList"
+          style={{
+            height: 'calc(100vh - 16px)',
+            overflow: 'auto',
+            marginTop: '4px',
+            background: colorBgContainer,
+            borderRadius: borderRadiusLG,
+          }}
+        >
+          <InfiniteScroll
+            dataLength={data.length}
+            next={loadMoreData}
+            hasMore={data.length < 50}
+            loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
+            endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+            scrollableTarget="scrollableNoteList"
+          >
+            <List
+              dataSource={data}
+              renderItem={(item) => (
+                <Link to={`/notes/${item.email}`}>
+                  <List.Item key={item.email} className="list-item">
+                    <List.Item.Meta
+                      style={{
+                        padding: '0 5px',
+                      }}
+                      avatar={<Avatar src={item.picture.medium} />}
+                      title={item.name.last}
+                      description={item.email}
+                    />
+                  </List.Item>
+                </Link>
+              )}
+            />
+          </InfiniteScroll>
+        </div>
+      </Sider>
+      <Layout>
+        <Header
+          style={{
+            padding: 0,
+            background: colorBgContainer,
+            borderRadius: borderRadiusLG,
+            margin: '8px 8px 0px 4px',
+          }}
+        >
+          <Row justify="space-between">
+            <Col span={1}>
+              <Button
+                type="link"
+                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                onClick={() => setCollapsed(!collapsed)}
+                style={{
+                  marginLeft: '10px',
+                }}
+                size="small"
               />
-              <Outlet />
-            </Suspense>
-          </div>
+            </Col>
+            <Col span={11}>
+              <Row justify="end">
+                <Col span={2}>
+                  <Button
+                    type="link"
+                    icon={<InfoCircleOutlined />}
+                    size="small"
+                  />
+                </Col>
+                <Col span={2}>
+                  <Button
+                    type="link"
+                    danger
+                    icon={<DeleteOutlined />}
+                    size="small"
+                  />
+                </Col>
+                <Col span={2}>
+                  <Dropdown menu={{ items }} trigger={['click']}>
+                    <Button type="link" icon={<MenuOutlined />} size="small" />
+                  </Dropdown>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Header>
+        <Content
+          style={{
+            margin: '4px 8px 8px 4px',
+            padding: 8,
+            minHeight: 'calc(100vh - 71px)',
+            background: colorBgContainer,
+            borderRadius: borderRadiusLG,
+          }}
+        >
+          <Suspense fallback={<Loader />}>
+            <FloatButton
+              tooltip={<div>New iNote</div>}
+              shape="circle"
+              type="primary"
+              style={{ right: 50 }}
+              onClick={createNewNote}
+              icon={<PlusSquareOutlined />}
+            />
+            <Outlet />
+          </Suspense>
         </Content>
         {/* <Footer style={{ textAlign: 'center' }}>
           Ant Design ©{new Date().getFullYear()} Created by Ant UED

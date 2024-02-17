@@ -3,6 +3,7 @@ import { DownloadOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { useRef } from 'react';
 import './Bubble.css';
+import NoteIcon from '../../assets/icon.png';
 
 function App() {
   const iconRef = useRef<HTMLButtonElement>(null);
@@ -54,10 +55,29 @@ function App() {
     <Button
       ref={iconRef}
       type="primary"
-      icon={<DownloadOutlined />}
-      size="large"
+      // size="large"
       onMouseDown={startDrag}
-    />
+      style={{
+        width: '64px',
+        height: '64px',
+        padding: 0,
+        borderRadius: '50%',
+        background: 'none',
+        border: 'none',
+      }}
+    >
+      <img
+        src={NoteIcon}
+        style={{
+          borderRadius: '50%',
+          width: '64px',
+          height: '64px',
+          userSelect: 'none',
+          pointerEvents: 'none',
+        }}
+        draggable={false}
+      />
+    </Button>
   );
 }
 
