@@ -1,7 +1,9 @@
 @import "~antd/dist/reset.css";
+@import "~@mdxeditor/editor/style.css";
 
 #root {
-    max-height: 100vh;
+    height: 100vh;
+    min-height: 100vh;
     overflow: hidden;
     margin: 0;
 }

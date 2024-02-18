@@ -33,7 +33,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 const { Header, Content, Footer, Sider } = Layout;
 
 type AppLayoutProps = {
-  menuItems: any[];
+  // menuItems: any[];
 };
 
 type DataType = {
@@ -52,7 +52,7 @@ type DataType = {
   nat: string;
 };
 
-const AppLayout: React.FC<AppLayoutProps> = ({ menuItems }) => {
+const AppLayout: React.FC<AppLayoutProps> = () => {
   const navigate = useNavigate();
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -130,20 +130,22 @@ const AppLayout: React.FC<AppLayoutProps> = ({ menuItems }) => {
           // minHeight: 'calc(100vh - 16px)',
           background: '#f5f5f5',
           // background: colorBgContainer,
-          borderRadius: borderRadiusLG,
+          // borderRadius: borderRadiusLG,
         }}
-        onBreakpoint={(broken) => {
-          console.log(broken);
-        }}
-        onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
-        }}
+        // onBreakpoint={(broken) => {
+        //   console.log(broken);
+        // }}
+        // onCollapse={(collapsed, type) => {
+        //   console.log(collapsed, type);
+        // }}
       >
         <Header
           style={{
             padding: 0,
             background: colorBgContainer,
-            borderRadius: borderRadiusLG,
+            lineHeight: '50px',
+            height: '50px',
+            // borderRadius: borderRadiusLG,
             marginBottom: '4px',
             // margin: '8px 0px 4px 4px',
           }}
@@ -176,11 +178,11 @@ const AppLayout: React.FC<AppLayoutProps> = ({ menuItems }) => {
         <div
           id="scrollableNoteList"
           style={{
-            height: 'calc(100vh - 16px)',
+            // height: 'calc(100vh - 16px)',
             overflow: 'auto',
             marginTop: '4px',
             background: colorBgContainer,
-            borderRadius: borderRadiusLG,
+            // borderRadius: borderRadiusLG,
           }}
         >
           <InfiniteScroll
@@ -211,17 +213,27 @@ const AppLayout: React.FC<AppLayoutProps> = ({ menuItems }) => {
           </InfiniteScroll>
         </div>
       </Sider>
-      <Layout>
+      <Layout
+        style={
+          {
+            // height: '100vh',
+            // overflowX: 'scroll',
+          }
+        }
+      >
         <Header
           style={{
             padding: 0,
+            height: '25px',
+            lineHeight: '25px',
+            position: 'sticky',
             background: colorBgContainer,
-            borderRadius: borderRadiusLG,
+            // borderRadius: borderRadiusLG,
             margin: '8px 8px 0px 4px',
           }}
         >
           <Row justify="space-between">
-            <Col span={1}>
+            <Col lg={1} md={4}>
               <Button
                 type="link"
                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -232,16 +244,16 @@ const AppLayout: React.FC<AppLayoutProps> = ({ menuItems }) => {
                 size="small"
               />
             </Col>
-            <Col span={11}>
+            <Col lg={11} md={8}>
               <Row justify="end">
-                <Col span={2}>
+                <Col lg={2} md={4}>
                   <Button
                     type="link"
                     icon={<InfoCircleOutlined />}
                     size="small"
                   />
                 </Col>
-                <Col span={2}>
+                <Col lg={2} md={4}>
                   <Button
                     type="link"
                     danger
@@ -249,7 +261,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ menuItems }) => {
                     size="small"
                   />
                 </Col>
-                <Col span={2}>
+                <Col lg={2} md={4}>
                   <Dropdown menu={{ items }} trigger={['click']}>
                     <Button type="link" icon={<MenuOutlined />} size="small" />
                   </Dropdown>
@@ -262,9 +274,11 @@ const AppLayout: React.FC<AppLayoutProps> = ({ menuItems }) => {
           style={{
             margin: '4px 8px 8px 4px',
             padding: 8,
-            minHeight: 'calc(100vh - 71px)',
+            // minHeight: '90vh',
+            // height: '90vh',
+            // overflow: 'scroll',
             background: colorBgContainer,
-            borderRadius: borderRadiusLG,
+            // borderRadius: borderRadiusLG,
           }}
         >
           <Suspense fallback={<Loader />}>
@@ -279,9 +293,6 @@ const AppLayout: React.FC<AppLayoutProps> = ({ menuItems }) => {
             <Outlet />
           </Suspense>
         </Content>
-        {/* <Footer style={{ textAlign: 'center' }}>
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
-        </Footer> */}
       </Layout>
     </Layout>
   );

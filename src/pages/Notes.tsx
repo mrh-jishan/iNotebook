@@ -1,6 +1,7 @@
 import { DatePicker } from 'antd';
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
+import CodeEditor from '../components/CodeEditor';
 
 const Notes: React.FC = () => {
   let { noteId } = useParams();
@@ -17,7 +18,7 @@ const Notes: React.FC = () => {
           Read our docs
         </button>
       </Link>
-      <DatePicker />
+      {/* <CodeEditor /> */}
     </div>
   );
 };

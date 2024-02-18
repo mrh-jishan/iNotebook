@@ -89,7 +89,8 @@
     }
   },
   "dependencies": {
-    "@uiw/react-codemirror": "^4.21.21",
+    "@mdxeditor/editor": "^2.9.0",
+    "@ngneat/falso": "^7.1.1",
     "antd": "^5.13.2",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.8",
