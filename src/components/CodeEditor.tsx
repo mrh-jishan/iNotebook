@@ -3,6 +3,8 @@ import {
   DirectiveDescriptor,
   KitchenSinkToolbar,
   MDXEditor,
+  MDXEditorMethods,
+  MDXEditorProps,
   SandpackConfig,
   codeBlockPlugin,
   codeMirrorPlugin,
@@ -22,6 +24,7 @@ import {
   toolbarPlugin,
 } from '@mdxeditor/editor';
 import { LeafDirective } from 'mdast-util-directive';
+import React, { useEffect, useRef } from 'react';
 
 // import dataCode from './dataCode.ts?raw'
 
@@ -124,10 +127,23 @@ export const YoutubeDirectiveDescriptor: DirectiveDescriptor<YoutubeDirectiveNod
     },
   };
 
-const CodeEditor = () => {
+type CodeEditorProps = {
+  markdown: string;
+};
+
+const CodeEditor: React.FC<CodeEditorProps> = ({ markdown }) => {
+  const editor = useRef<MDXEditorMethods>(null);
+  
+  useEffect(() => {
+    return () => {
+      editor.current?.setMarkdown(markdown);
+    };
+  }, [markdown]);
+
   return (
     <MDXEditor
-      markdown="# Hello world"
+      ref={editor}
+      markdown={markdown}
       onChange={(md) => console.log('change', { md })}
       plugins={[
         toolbarPlugin({ toolbarContents: () => <KitchenSinkToolbar /> }),

@@ -3,6 +3,7 @@ import { RouterProvider, createHashRouter } from 'react-router-dom';
 import './App.css';
 import AppLayout from '../components/Layout';
 import Page404 from '../pages/Page404';
+
 const Home = React.lazy(() => import('../pages/Home'));
 const Notes = React.lazy(() => import('../pages/Notes'));
 const About = React.lazy(() => import('../pages/About'));

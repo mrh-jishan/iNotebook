@@ -10,15 +10,16 @@ const Notes: React.FC = () => {
 
   return (
     <div>
-      <Link to="/">
+      {/* <Link to="/">
         <button type="button">
           <span role="img" aria-label="books">
             📚
           </span>
           Read our docs
         </button>
-      </Link>
-      {/* <CodeEditor /> */}
+      </Link> */}
+      {/* */}
+      <CodeEditor markdown={noteId || ''} />
     </div>
   );
 };

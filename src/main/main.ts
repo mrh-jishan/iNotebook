@@ -26,12 +26,6 @@ class AppUpdater {
 let mainWindow: BrowserWindow | null = null;
 let popupWindow: BrowserWindow | null = null;
 
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  log.info('message received-----: ', msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
-});
-
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
@@ -60,11 +54,11 @@ const installExtensions = async () => {
 /**
  * popupWindow create
  */
-const createPopupIcon = () => {
+const createPopup = () => {
   const { width: screenWidth, height: screenHeight } =
     screen.getPrimaryDisplay().workAreaSize;
- 
-    // Define the percentages for positioning
+
+  // Define the percentages for positioning
   const xPercentage = 0.95; // 89% from the left
   const yPercentage = 0.15; // 15% from the top
 
@@ -140,7 +134,7 @@ const createWindow = async () => {
   // Detect click outside of the main window
   mainWindow.on('blur', () => {
     // if (popupWindow === null) {
-    //   createPopupIcon();
+    //   createPopup();
     // } else {
     //   popupWindow.show();
     // }
@@ -169,6 +163,7 @@ const createWindow = async () => {
 };
 
 // Handle click on the popup icon
+
 ipcMain.on('close-popup', async () => {
   if (mainWindow === null) {
     createWindow();
@@ -179,6 +174,7 @@ ipcMain.on('close-popup', async () => {
 });
 
 // Handle message from renderer process to start dragging
+
 ipcMain.on('start-drag', (event, position) => {
   log.info('position moved----------: ', position);
   // log.info('event------:', event);
@@ -202,6 +198,7 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
+    require('./ipcMain_notes')
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the

@@ -2,9 +2,9 @@
 @import "~@mdxeditor/editor/style.css";
 
 #root {
-    height: 100vh;
+    /* height: 100vh;
     min-height: 100vh;
-    overflow: hidden;
+    overflow: hidden; */
     margin: 0;
 }
 

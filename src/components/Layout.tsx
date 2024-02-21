@@ -28,7 +28,6 @@ import {
   VideoCameraOutlined,
 } from '@ant-design/icons';
 import Loader from './Loader';
-import InfiniteScroll from 'react-infinite-scroll-component';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -54,31 +53,29 @@ type DataType = {
 
 const AppLayout: React.FC<AppLayoutProps> = () => {
   const navigate = useNavigate();
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-
   const [collapsed, setCollapsed] = useState<boolean>(false);
-
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<DataType[]>([]);
-
   const loadMoreData = () => {
-    if (loading) {
-      return;
-    }
-    setLoading(true);
-    fetch(
-      'https://randomuser.me/api/?results=10&inc=name,gender,email,nat,picture&noinfo',
-    )
-      .then((res) => res.json())
-      .then((body) => {
-        setData([...data, ...body.results]);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
+    // if (loading) {
+    //   return;
+    // }
+    // setLoading(true);
+    // fetch(
+    //   'https://randomuser.me/api/?results=10&inc=name,gender,email,nat,picture&noinfo',
+    // )
+    //   .then((res) => res.json())
+    //   .then((body) => {
+    //     setData([...data, ...body.results]);
+    //     setLoading(false);
+    //   })
+    //   .catch(() => {
+    //     setLoading(false);
+    //   });
   };
 
   useEffect(() => {
@@ -112,8 +109,40 @@ const AppLayout: React.FC<AppLayoutProps> = () => {
   ];
 
   const createNewNote = () => {
-    navigate('/notes/new');
+    // setData([
+    //   {
+    //     email: 'test' + data.length,
+    //     gender: 'gem' + data.length,
+    //     name: {
+    //       first: 'first' + data.length,
+    //       last: 'last' + data.length,
+    //       title: 'title' + data.length,
+    //     },
+    //     picture: {
+    //       large: 'df' + data.length,
+    //       medium: 'dre' + data.length,
+    //       thumbnail: 'dfer' + data.length,
+    //     },
+    //     nat: 'e4' + data.length,
+    //   },
+    //   ...data,
+    // ]);
+
+    console.log('create new note---123', window.electron);
+
+    window.electron.ipcRenderer.sendMessage('add-note', 'data-234');
+    navigate(`/notes/${data.length}`);
   };
+
+  window.electron.ipcRenderer.once('add-note', (arg) => {
+    // eslint-disable-next-line no-console
+    console.log('add-note here----: ', arg);
+  });
+
+  // window.electron.ipcRenderer.once('add-note', (arg) => {
+  //   // eslint-disable-next-line no-console
+  //   console.log('add-note', arg);
+  // });
 
   return (
     <Layout>
@@ -127,7 +156,7 @@ const AppLayout: React.FC<AppLayoutProps> = () => {
         width={300}
         style={{
           margin: '8px 4px 4px 8px',
-          // minHeight: 'calc(100vh - 16px)',
+          minHeight: 'calc(100vh - 16px)',
           background: '#f5f5f5',
           // background: colorBgContainer,
           // borderRadius: borderRadiusLG,
@@ -176,7 +205,7 @@ const AppLayout: React.FC<AppLayoutProps> = () => {
         </Header>
 
         <div
-          id="scrollableNoteList"
+          // id="scrollableNoteList"
           style={{
             // height: 'calc(100vh - 16px)',
             overflow: 'auto',
@@ -185,32 +214,26 @@ const AppLayout: React.FC<AppLayoutProps> = () => {
             // borderRadius: borderRadiusLG,
           }}
         >
-          <InfiniteScroll
-            dataLength={data.length}
-            next={loadMoreData}
-            hasMore={data.length < 50}
-            loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-            endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
-            scrollableTarget="scrollableNoteList"
-          >
-            <List
-              dataSource={data}
-              renderItem={(item) => (
-                <Link to={`/notes/${item.email}`}>
-                  <List.Item key={item.email} className="list-item">
-                    <List.Item.Meta
-                      style={{
-                        padding: '0 5px',
-                      }}
-                      avatar={<Avatar src={item.picture.medium} />}
-                      title={item.name.last}
-                      description={item.email}
-                    />
-                  </List.Item>
-                </Link>
-              )}
-            />
-          </InfiniteScroll>
+          <List
+            dataSource={data}
+            locale={{
+              emptyText: 'No iNotes',
+            }}
+            renderItem={(item) => (
+              <Link to={`/notes/${item.email}`}>
+                <List.Item key={item.email} className="list-item">
+                  <List.Item.Meta
+                    style={{
+                      padding: '0 5px',
+                    }}
+                    avatar={<Avatar src={item.picture.medium} />}
+                    title={item.name.last}
+                    description={item.email}
+                  />
+                </List.Item>
+              </Link>
+            )}
+          />
         </div>
       </Sider>
       <Layout
@@ -283,7 +306,7 @@ const AppLayout: React.FC<AppLayoutProps> = () => {
         >
           <Suspense fallback={<Loader />}>
             <FloatButton
-              tooltip={<div>New iNote</div>}
+              tooltip="New iNote"
               shape="circle"
               type="primary"
               style={{ right: 50 }}
