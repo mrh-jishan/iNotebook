@@ -36,19 +36,9 @@ type AppLayoutProps = {
 };
 
 type DataType = {
-  gender: string;
-  name: {
-    title: string;
-    first: string;
-    last: string;
-  };
-  email: string;
-  picture: {
-    large: string;
-    medium: string;
-    thumbnail: string;
-  };
-  nat: string;
+  title: string;
+  markdown: string;
+  path: string;
 };
 
 const AppLayout: React.FC<AppLayoutProps> = () => {
@@ -134,9 +124,11 @@ const AppLayout: React.FC<AppLayoutProps> = () => {
     navigate(`/notes/${data.length}`);
   };
 
-  window.electron.ipcRenderer.once('add-note', (arg) => {
+  window.electron.ipcRenderer.once('add-note-receivd', (arg) => {
     // eslint-disable-next-line no-console
-    console.log('add-note here----: ', arg);
+    console.log('add-note here-agai---: ', arg);
+
+    setData([arg, ...data]);
   });
 
   // window.electron.ipcRenderer.once('add-note', (arg) => {
@@ -207,7 +199,7 @@ const AppLayout: React.FC<AppLayoutProps> = () => {
         <div
           // id="scrollableNoteList"
           style={{
-            // height: 'calc(100vh - 16px)',
+            height: 'calc(100vh - 66px)',
             overflow: 'auto',
             marginTop: '4px',
             background: colorBgContainer,
@@ -220,15 +212,21 @@ const AppLayout: React.FC<AppLayoutProps> = () => {
               emptyText: 'No iNotes',
             }}
             renderItem={(item) => (
-              <Link to={`/notes/${item.email}`}>
-                <List.Item key={item.email} className="list-item">
+              <Link to={`/notes/${item.path}`}>
+                <List.Item key={item.path} className="list-item">
                   <List.Item.Meta
                     style={{
                       padding: '0 5px',
                     }}
-                    avatar={<Avatar src={item.picture.medium} />}
-                    title={item.name.last}
-                    description={item.email}
+                    avatar={
+                      <Avatar
+                        src={
+                          'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg'
+                        }
+                      />
+                    }
+                    title={item.title}
+                    description={item.markdown}
                   />
                 </List.Item>
               </Link>

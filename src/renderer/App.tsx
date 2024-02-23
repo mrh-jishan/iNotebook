@@ -5,7 +5,6 @@ import AppLayout from '../components/Layout';
 import Page404 from '../pages/Page404';
 
 const Home = React.lazy(() => import('../pages/Home'));
-const Notes = React.lazy(() => import('../pages/Notes'));
 const About = React.lazy(() => import('../pages/About'));
 
 export default function App() {
@@ -21,11 +20,11 @@ export default function App() {
         },
         {
           path: '/notes',
-          element: <Notes />,
+          element: <Home />,
         },
         {
           path: '/notes/:noteId',
-          element: <Notes />,
+          element: <Home />,
         },
         {
           path: '/about',

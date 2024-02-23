@@ -129,14 +129,17 @@ export const YoutubeDirectiveDescriptor: DirectiveDescriptor<YoutubeDirectiveNod
 
 type CodeEditorProps = {
   markdown: string;
+  onChange: (md: string) => void;
 };
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ markdown }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({ markdown, onChange }) => {
   const editor = useRef<MDXEditorMethods>(null);
-  
+
   useEffect(() => {
     return () => {
       editor.current?.setMarkdown(markdown);
+      console.log('on change the -----: ', markdown);
+      
     };
   }, [markdown]);
 
@@ -144,7 +147,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ markdown }) => {
     <MDXEditor
       ref={editor}
       markdown={markdown}
-      onChange={(md) => console.log('change', { md })}
+      onChange={onChange}
       plugins={[
         toolbarPlugin({ toolbarContents: () => <KitchenSinkToolbar /> }),
         listsPlugin(),
