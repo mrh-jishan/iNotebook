@@ -5,8 +5,9 @@ export type Channels =
   | 'close-popup'
   | 'start-drag'
   | 'add-note'
-  | 'add-note-receivd'
-  | 'update-note';
+  | 'update-note'
+  | 'load-notes'
+  | 'get-note';
 
 const electronHandler = {
   ipcRenderer: {

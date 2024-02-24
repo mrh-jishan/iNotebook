@@ -9,13 +9,16 @@ const Home = () => {
 
   useEffect(() => {
     return () => {
-      setMarkdown(`# this is my note ${noteId}`);
+      window.electron.ipcRenderer.sendMessage('get-note', [noteId]);
+      window.electron.ipcRenderer.once('get-notes', (arg) => {
+        setMarkdown(arg);
+      });
     };
   }, [noteId]);
 
   const onCodeEditorChange = (md) => {
     window.electron.ipcRenderer.sendMessage('update-note', {
-      file: '',
+      file: noteId,
       md,
     });
   };

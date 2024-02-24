@@ -2,37 +2,46 @@ import { app, BrowserWindow, shell, ipcMain, screen } from 'electron';
 import log from 'electron-log';
 import jetpack from 'fs-jetpack';
 import crypto from 'crypto';
+import os from 'os';
 
-export const writeFile = () => {
-  //     const remote = require('electron').remote;
-  // const app = remote.app;
-  // console.log(app.getPath('userData'));
-};
+const cwd = `${app.getPath('userData')}/${os.userInfo().username}`;
 
 // when try to add note
 ipcMain.on('add-note', async (event, arg) => {
-  const cwd = app.getPath('userData');
   const createdFile = `${crypto.randomUUID()}.md`;
   jetpack.cwd(cwd).write(createdFile, '');
-  const obj = {
+  event.reply('add-note', {
     title: `title - ${createdFile}`,
     markdown: '',
     path: createdFile,
-  };
-  event.reply('add-note-receivd', obj);
+  });
 });
 
 // on update note
 ipcMain.on('update-note', async (event, arg) => {
-  const cwd = app.getPath('userData');
+  const { file, md } = arg;
+  jetpack.cwd(cwd).write(file, md);
+});
 
-  // console.log('this is update note', event);
-  console.log('this is update note', arg);
+ipcMain.on('get-note', async (event, arg) => {
+  const md = jetpack.read(`${cwd}/${arg}`);
+  event.reply('get-notes', md);
+});
 
-  // const createdFile = `${crypto.randomUUID()}.md`;
-  // jetpack.cwd(cwd).write(createdFile, '');
-  // const obj = { greet: 'Hello World!', createdFile };
-  // event.reply('add-note', obj);
+ipcMain.on('load-notes', async (event, arg) => {
+  const data = jetpack
+    .list(cwd)
+    ?.filter((f) => f.endsWith('.md'))
+    .map((file) => {
+      const md = jetpack.read(`${cwd}/${file}`);
+      return {
+        title: md,
+        markdown: md,
+        path: file,
+      };
+    });
+  console.log('data: ', data);
+  event.reply('load-notes', data);
 });
 
 // ipp-example

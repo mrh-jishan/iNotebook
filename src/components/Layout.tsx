@@ -99,37 +99,21 @@ const AppLayout: React.FC<AppLayoutProps> = () => {
   ];
 
   const createNewNote = () => {
-    // setData([
-    //   {
-    //     email: 'test' + data.length,
-    //     gender: 'gem' + data.length,
-    //     name: {
-    //       first: 'first' + data.length,
-    //       last: 'last' + data.length,
-    //       title: 'title' + data.length,
-    //     },
-    //     picture: {
-    //       large: 'df' + data.length,
-    //       medium: 'dre' + data.length,
-    //       thumbnail: 'dfer' + data.length,
-    //     },
-    //     nat: 'e4' + data.length,
-    //   },
-    //   ...data,
-    // ]);
-
-    console.log('create new note---123', window.electron);
-
-    window.electron.ipcRenderer.sendMessage('add-note', 'data-234');
-    navigate(`/notes/${data.length}`);
+    window.electron.ipcRenderer.sendMessage('add-note');
+    // navigate(`/notes/${data.length}`);
   };
 
-  window.electron.ipcRenderer.once('add-note-receivd', (arg) => {
-    // eslint-disable-next-line no-console
-    console.log('add-note here-agai---: ', arg);
-
+  window.electron.ipcRenderer.once('add-note', (arg) => {
     setData([arg, ...data]);
   });
+
+  useEffect(() => {
+    window.electron.ipcRenderer.sendMessage('load-notes');
+    window.electron.ipcRenderer.once('load-notes', (arg) => {
+      console.log('load notes-----: ', arg);
+      setData(arg);
+    });
+  }, []);
 
   // window.electron.ipcRenderer.once('add-note', (arg) => {
   //   // eslint-disable-next-line no-console
